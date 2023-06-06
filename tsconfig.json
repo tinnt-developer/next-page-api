@@ -2,6 +2,7 @@
   "compilerOptions": {
     "useDefineForClassFields": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
