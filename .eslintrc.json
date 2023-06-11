@@ -16,7 +16,11 @@
       "jsx": true
     }
   },
-  "ignorePatterns": ["next.config.js","postcss.config.js", "tailwind.config.js", "**/*.js"],
+  "ignorePatterns": [
+    "next.config.js",
+    "postcss.config.js",
+    "tailwind.config.js"
+  ],
   "rules": {
     "prettier/prettier": "error",
     "no-unused-vars": "off",

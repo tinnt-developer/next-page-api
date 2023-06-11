@@ -1,25 +1,6 @@
 import NextAuth, { AuthOptions, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const data = {
-  token: {
-    platform: '',
-    access_token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF0Zm9ybSI6Implbm8iLCJlbWFpbCI6InF1eS4xMjA5OTNAZ21haWwuY29tIiwiZXhwIjoxNjg2MDUyMzI1LCJpYXQiOjE2ODYwMzc5MjUsInN1YiI6IjRmNjdjMTQ3LTg3MjYtNDU4NS1iZWNhLWIzNTE1MTUwZmJhMiJ9.muia5iZoAOeSn1If87S0YD4RGoNX76xtQTjCIDYzWfk',
-    refresh_token: '29cf8170-5d04-4aea-9c97-2231e3f8338a',
-    expired_at: 1686052325,
-  },
-  user: {
-    id: '4f67c147-8726-4585-beca-b3515150fba2',
-    name: 'Phan Vinh Quy',
-    email: 'quy.120993@gmail.com',
-    profile_picture:
-      'https://lh3.googleusercontent.com/a/AGNmyxbweqCD03j26dwzWEdLHIWgqWHTh3tINbHDYn5BUw=s96-c',
-    phone: null,
-    bio: null,
-  },
-};
-
 export const options = {
   providers: [
     CredentialsProvider({
@@ -31,11 +12,19 @@ export const options = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        return new Promise<any>((resolve, reject) => {
-          setTimeout(() => {
-            resolve(data);
-          }, 2000);
+        const res = await fetch(`${process.env.API_URL}/auth/authenticate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password,
+            platform: 'alumni',
+          }),
         });
+
+        return await res.json();
       },
     }),
   ],
@@ -43,6 +32,14 @@ export const options = {
     strategy: 'jwt',
   },
   callbacks: {
+    signIn({ user }) {
+      console.log('Signin', { user });
+      if (user.status === 'success') {
+        return true;
+      } else {
+        return false;
+      }
+    },
     jwt({ token, user, account, profile }) {
       //USER object is the response returned from the authorize callback
       //PROFILE object is the raw body of the HTTP POST submission.
@@ -52,7 +49,7 @@ export const options = {
       if (user) {
         token = {
           ...token,
-          ...user,
+          ...user.data,
         };
       }
 
@@ -60,8 +57,8 @@ export const options = {
     },
     session({ session, user, token }) {
       if (token) {
-        session.user = token.user as User;
-        session.token = token.token as User['token'];
+        session.user = token.user as User['data']['user'];
+        session.token = token.token as User['data']['token'];
       }
 
       return session;

@@ -1,10 +1,11 @@
-import type { AppProps } from 'next/app';
-
 import { SessionProvider } from 'next-auth/react';
+import type { AppProps } from 'next/app';
 
 import 'src/styles/globals.css';
 
 import { SWRConfig } from 'swr';
+
+import { ClientAuth } from 'src/components/application';
 
 export default function App({
   Component,
@@ -13,7 +14,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <SWRConfig>
-        <Component {...pageProps} />
+        <ClientAuth component={Component} pageProps={pageProps} />
       </SWRConfig>
     </SessionProvider>
   );

@@ -14,12 +14,12 @@ import {
   ValidationPipe,
 } from 'next-api-decorators';
 
-import { AuthGuard } from 'src/libs/server/auth-guard';
+import { AdminGuard } from 'src/libs/server/decorators';
 
 import { sampleUserData, type User } from './data';
 import { CreateUserInput, UpdateUserInput } from './dto';
 
-@AuthGuard()
+@AdminGuard()
 class UserRouter {
   // Mimic database for example purposes
   private users = sampleUserData;
