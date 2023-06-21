@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 export const options = {
   providers: [
     CredentialsProvider({
-      id: 'provider-id-1',
+      id: 'alumni-credentials',
       name: 'Login Manually',
       type: 'credentials',
       credentials: {
@@ -12,6 +12,7 @@ export const options = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
+        console.log(process.env.API_URL);
         const res = await fetch(`${process.env.API_URL}/auth/authenticate`, {
           method: 'POST',
           headers: {
