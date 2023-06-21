@@ -12,11 +12,11 @@ const inter = Inter({ subsets: ['latin'] });
 const Home: NextPageWithAuth<{ events: any[] }> = ({ events }) => {
   const { data } = useSession();
 
-  const { data: list } = useSWR('/api/events', (url) =>
-    fetch(url).then((res) => res.json()),
+  const { data: list } = useSWR('/api/jobs', (url) =>
+    fetch(url, {}).then((res) => res.json()),
   );
 
-  console.log(list);
+  console.log({ list });
 
   return (
     <main
