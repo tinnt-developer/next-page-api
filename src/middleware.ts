@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  req.cookies.clear();
+  // req.cookies.clear();
   // @ts-ignore
   req.headers.set('Authorization', `Bearer ${token.token.access_token}`);
 
